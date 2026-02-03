@@ -455,4 +455,3 @@ docker-compose down
 - 配套文件：docker-compose.yml、requirements.txt、package.json 可基于本文档架构快速生成
 
 - 数据库 SQL 脚本可直接复制执行，初始化系统基础表结构
-    > （注：文档部分内容可能由 AI 生成）
