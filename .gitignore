@@ -54,6 +54,58 @@ frontend/.stylelintcache
 
 # 测试覆盖率
 frontend/coverage/
+frontend/node_modules
+frontend/.DS_Store
+frontend/dist
+frontend/dist-ssr
+frontend/dist.zip
+frontend/dist.tar
+frontend/dist.war
+frontend/.nitro
+frontend/.output
+frontend/*-dist.zip
+frontend/*-dist.tar
+frontend/*-dist.war
+frontend/coverage
+frontend/*.local
+frontend/**/.vitepress/cache
+frontend/.cache
+frontend/.turbo
+frontend/.temp
+frontend/dev-dist
+frontend/.stylelintcache
+frontend/yarn.lock
+frontend/package-lock.json
+frontend/.VSCodeCounter
+frontend/**/backend-mock/data
+
+# local env files
+frontend/.env.local
+frontend/.env.*.local
+frontend/.eslintcache
+
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+frontend/vite.config.mts.*
+frontend/vite.config.mjs.*
+frontend/vite.config.js.*
+frontend/vite.config.ts.*
+
+# Editor directories and files
+frontend/.idea
+# .vscode
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?
+frontend/.history
+frontend/.cursor
 
 # ==============================================
 # 后端 Python (FastAPI) 专用忽略规则
