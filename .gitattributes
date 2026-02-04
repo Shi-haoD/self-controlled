@@ -1,2 +1,98 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+##############################################################################
+# 1. 全局通用配置：统一换行符规范，适配所有平台 Windows/macOS/Linux
+##############################################################################
+# 自动识别文本文件，提交转LF，检出适配系统
+*               text=auto
+
+# 强制指定文本文件使用 LF 换行（标准化配置，适用于代码/配置文件）
+*.text          eol=lf
+*.md            eol=lf
+*.json          eol=lf
+*.yaml          eol=lf
+*.yml           eol=lf
+*.toml          eol=lf
+*.conf          eol=lf
+*.env.example   eol=lf
+*.gitignore     eol=lf
+*.gitattributes  eol=lf
+
+##############################################################################
+# 2. 前端 Vue3 专项配置（frontend/ 目录下所有前端相关文件）
+##############################################################################
+# 核心代码文件
+frontend/**/*.vue       text eol=lf
+frontend/**/*.js         text eol=lf
+frontend/**/*.ts         text eol=lf
+frontend/**/*.jsx        text eol=lf
+frontend/**/*.tsx        text eol=lf
+frontend/**/*.html       text eol=lf
+# 样式文件
+frontend/**/*.css        text eol=lf
+frontend/**/*.scss       text eol=lf
+frontend/**/*.less       text eol=lf
+# 配置文件
+frontend/**/.eslintrc.*  text eol=lf
+frontend/**/prettierrc.* text eol=lf
+frontend/**/vite.config.* text eol=lf
+frontend/**/package.json text eol=lf
+frontend/**/pnpm-lock.yaml text eol=lf merge=ours
+frontend/**/yarn.lock    text eol=lf merge=ours
+frontend/**/package-lock.json text eol=lf merge=ours
+
+# 前端二进制资源：禁止换行转换，不做文本diff
+frontend/**/*.png        -text diff=binary
+frontend/**/*.jpg        -text diff=binary
+frontend/**/*.jpeg       -text diff=binary
+frontend/**/*.gif        -text diff=binary
+frontend/**/*.svg        text eol=lf  # SVG为文本格式，可正常diff
+frontend/**/*.ico        -text diff=binary
+frontend/**/*.woff       -text diff=binary
+frontend/**/*.woff2      -text diff=binary
+frontend/**/*.ttf        -text diff=binary
+frontend/**/*.eot        -text diff=binary
+
+# 前端构建产物：标记为生成文件，GitHub不统计代码量
+frontend/dist/**         linguist-generated=true
+frontend/node_modules/** linguist-vendored=true
+
+##############################################################################
+# 3. 后端 Python (FastAPI) 专项配置（backend/ 目录下所有后端文件）
+##############################################################################
+# Python 核心代码
+backend/**/*.py          text eol=lf diff=python
+backend/**/*.pyi         text eol=lf
+
+# Python 依赖/环境配置
+backend/**/requirements.txt    text eol=lf
+backend/**/pyproject.toml      text eol=lf
+backend/**/poetry.lock         text eol=lf merge=ours
+backend/**/Pipfile             text eol=lf
+backend/**/Pipfile.lock        text eol=lf merge=ours
+
+# Python 缓存/虚拟环境：标记为第三方/生成文件，忽略代码统计
+backend/**/__pycache__/**      linguist-generated=true
+backend/**/.venv/**            linguist-vendored=true
+backend/**/venv/**             linguist-vendored=true
+backend/**/env/**              linguist-vendored=true
+
+# 日志/临时数据文件
+backend/**/*.log         text eol=lf linguist-generated=true
+backend/**/*.sqlite       -text diff=binary
+backend/**/*.db           -text diff=binary
+
+##############################################################################
+# 4. 大文件管理 Git LFS 配置（可选，用于大于100MB的资源文件）
+##############################################################################
+# 若项目包含视频、模型文件、大型压缩包等，需先安装Git LFS，再启用以下规则
+#*.zip           filter=lfs diff=lfs merge=lfs -text
+#*.rar           filter=lfs diff=lfs merge=lfs -text
+#*.mp4           filter=lfs diff=lfs merge=lfs -text
+#*.h5            filter=lfs diff=lfs merge=lfs -text
+#*.ckpt          filter=lfs diff=lfs merge=lfs -text
+
+##############################################################################
+# 5. 合并冲突优化：锁文件强制保留本地版本，避免依赖冲突
+##############################################################################
+# merge=ours 表示合并冲突时，自动保留当前分支的文件，适用于依赖锁文件
+[merge "ours"]
+    driver = true

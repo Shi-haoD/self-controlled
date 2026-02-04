@@ -1,0 +1,93 @@
+# ==============================================
+# 全局通用忽略规则（系统/编辑器缓存，全项目生效）
+# ==============================================
+# 系统缓存文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 编辑器/IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.c9/
+*.launch
+
+# 环境变量敏感文件（核心：禁止提交真实密钥）
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# 日志/临时文件
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# ==============================================
+# 前端 Vue3 (Vite) 专用忽略规则
+# 适配目录：frontend/
+# ==============================================
+# 依赖包（体积大，无需提交）
+frontend/node_modules/
+
+# 构建打包产物
+frontend/dist/
+frontend/build/
+
+# 前端缓存
+frontend/.cache/
+frontend/.vite/
+frontend/.eslintcache
+frontend/.stylelintcache
+
+# 测试覆盖率
+frontend/coverage/
+
+# ==============================================
+# 后端 Python (FastAPI) 专用忽略规则
+# 适配目录：backend/
+# ==============================================
+# Python 字节码缓存
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/**/*$py.class
+backend/**/.Python
+
+# 虚拟环境（独立环境，不提交）
+backend/.venv/
+backend/venv/
+backend/env/
+backend/ENV/
+backend/.env/
+
+# 依赖安装缓存
+backend/*.egg-info/
+backend/.eggs/
+backend/dist/
+backend/build/
+backend/*.egg
+
+# 数据库文件（本地测试库，禁止提交）
+backend/*.db
+backend/*.sqlite3
+backend/*.sql
+
+# 测试/覆盖率文件
+backend/htmlcov/
+backend/.coverage
+backend/.pytest_cache/
+
+# Mypy 类型检查缓存
+backend/.mypy_cache/
