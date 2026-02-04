@@ -47,3 +47,55 @@ backend/
 接口地址
 http://127.0.0.1:8000/openapi.json
 http://127.0.0.1:8000/docs
+
+## 步骤1：创建并激活虚拟环境（仅需执行1次） 之后修改requirements代码也需要进入虚拟环境后执行
+
+1. 打开终端（Windows：CMD/PowerShell/Anaconda Prompt；Linux/Mac：终端）；
+
+2. 进入后端项目根目录（即backend文件夹所在目录，例如：cd D:\projects\backend）：
+                  `cd backend`
+
+3. 创建Python虚拟环境（环境名称为venv，默认创建在backend目录下）：
+                  `python -m venv venv`
+
+4. 激活虚拟环境（激活成功后，终端前缀会显示「(venv)」）：
+                  Windows系统（CMD/PowerShell）：
+                          `venv\Scripts\activate`
+
+5. Linux/Mac系统：
+                          `source venv/bin/activate`
+
+## 步骤2：安装项目依赖（激活虚拟环境后执行）
+
+在激活虚拟环境的终端中，执行以下命令，自动安装requirements.txt中的所有依赖：
+
+```bash
+pip install -r requirements.txt
+```
+
+安装成功提示：所有依赖包显示“Successfully installed”，无报错信息。
+
+## 步骤3：启动项目服务
+
+在激活虚拟环境的终端中，执行以下命令启动FastAPI服务：
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+参数说明：
+
+- app.main:app：指定启动入口（app文件夹→main.py文件→app实例）；
+
+- --reload：热重载模式，修改代码后自动重启服务（开发环境专用，生产环境可删除此参数）。
+
+## 步骤4：验证服务启动成功
+
+服务启动成功后，终端会输出以下信息（无报错，显示访问地址）：
+
+```bash
+Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Watching for file changes with StatReload
+```
+
+此时，服务已正常启动，本地访问地址：http://127.0.0.1:8000

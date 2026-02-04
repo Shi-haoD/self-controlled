@@ -1,6 +1,72 @@
+# -------------------------------
+# Web 框架 & 服务器 上线前可以这样做（防止依赖炸）：pip freeze > requirements.lock.txt
+# -------------------------------
+
 fastapi
+# FastAPI：后端主框架，用于构建 API（高性能、类型友好、自动生成 Swagger）
+
 uvicorn[standard]
+# ASGI 服务器：运行 FastAPI
+# [standard] 会额外安装：
+# - uvloop（高性能事件循环）
+# - watchfiles（代码热更新）
+# - httptools（更快的 HTTP 解析）
+
+
+# -------------------------------
+# 数据库相关
+# -------------------------------
+
 sqlalchemy
+# ORM 框架：用于定义模型、操作数据库（兼容 PostgreSQL / MySQL 等）
+
 psycopg2-binary
+
+# PostgreSQL 官方驱动（binary 版本，省去本地编译）
+
+
+# -------------------------------
+# 配置与环境变量
+# -------------------------------
+
 python-dotenv
+pydantic-settings>=2.0.0
+# 读取 .env 文件中的环境变量
+# 用于区分 dev / test / prod 配置（数据库、密钥等）
+
+
+# -------------------------------
+# 数据校验 & 序列化
+# -------------------------------
+
 pydantic
+# 数据校验与序列化
+# FastAPI 底层依赖，用于 Request / Response Schema
+
+
+# -------------------------------
+# 认证 & 安全
+# -------------------------------
+
+python-jose[cryptography]>=3.3.0
+# JWT 生成与解析
+# 用于 Access Token / Refresh Token 认证
+# cryptography 提供更安全的加密算法支持
+
+passlib[bcrypt]>=1.7.4
+# 密码加密与校验
+# bcrypt 是业界标准密码哈希算法（不可逆）
+
+
+# -------------------------------
+# 文件上传 / 表单支持
+# -------------------------------
+
+python-multipart>=0.0.9
+
+# 处理 multipart/form-data
+# 用于：
+# - 登录表单
+# - 文件上传
+# - vben-admin 默认登录请求格式
+
