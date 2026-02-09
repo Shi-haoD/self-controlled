@@ -21,6 +21,11 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """生成密码哈希，兜底异常处理"""
     try:
+        # 预先检查密码长度
+        byte_len = len(password.encode('utf-8'))
+        if byte_len > 72:
+            raise ValueError(f"密码过长({byte_len}字节)，bcrypt限制为72字节")
+        
         return pwd_context.hash(password)
     except ValueError as e:
         # 适配bcrypt 72字节限制等硬性约束

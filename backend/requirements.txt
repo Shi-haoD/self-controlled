@@ -1,45 +1,43 @@
 # -------------------------------
-# Web 框架 & 服务器 上线前可以这样做（防止依赖炸）：pip freeze > requirements.lock.txt
+# Web 框架 & 服务器
 # -------------------------------
 
-fastapi
+fastapi>=0.104.0
 # FastAPI：后端主框架，用于构建 API（高性能、类型友好、自动生成 Swagger）
 
-uvicorn[standard]
+uvicorn[standard]>=0.24.0
 # ASGI 服务器：运行 FastAPI
-# [standard] 会额外安装：
-# - uvloop（高性能事件循环）
-# - watchfiles（代码热更新）
-# - httptools（更快的 HTTP 解析）
+# [standard] 包含 uvloop、watchfiles、httptools 等优化组件
 
 
 # -------------------------------
 # 数据库相关
 # -------------------------------
 
-sqlalchemy
+sqlalchemy>=2.0.0
 # ORM 框架：用于定义模型、操作数据库（兼容 PostgreSQL / MySQL 等）
 
-psycopg2-binary
+psycopg2-binary>=2.9.0
+# PostgreSQL 官方驱动（binary 版本，免编译安装）
 
-# PostgreSQL 官方驱动（binary 版本，省去本地编译）
+alembic>=1.12.0
+# 数据库迁移工具
 
 
 # -------------------------------
 # 配置与环境变量
 # -------------------------------
 
-python-dotenv
+python-dotenv>=1.0.0
 pydantic-settings>=2.0.0
-# 读取 .env 文件中的环境变量
-# 用于区分 dev / test / prod 配置（数据库、密钥等）
+# 环境变量管理，支持 .env 文件
 
 
 # -------------------------------
 # 数据校验 & 序列化
 # -------------------------------
 
-pydantic
+pydantic>=2.0.0
 # 数据校验与序列化
 # FastAPI 底层依赖，用于 Request / Response Schema
 
@@ -51,9 +49,9 @@ pydantic
 python-jose[cryptography]>=3.3.0
 # JWT 生成与解析
 # 用于 Access Token / Refresh Token 认证
-# cryptography 提供更安全的加密算法支持
 
 passlib[bcrypt]>=1.7.4
+bcrypt==3.2.2
 # 密码加密与校验
 # bcrypt 是业界标准密码哈希算法（不可逆）
 
@@ -63,10 +61,48 @@ passlib[bcrypt]>=1.7.4
 # -------------------------------
 
 python-multipart>=0.0.9
-
 # 处理 multipart/form-data
-# 用于：
-# - 登录表单
-# - 文件上传
-# - vben-admin 默认登录请求格式
+# 支持文件上传和表单数据
+
+
+# -------------------------------
+# 时区处理
+# -------------------------------
+
+pytz>=2023.3
+# 时区处理库
+# 用于时区转换和时区列表获取
+
+
+# -------------------------------
+# 开发工具
+# -------------------------------
+
+black>=23.0.0
+# 代码格式化工具
+
+flake8>=6.0.0
+# 代码检查工具
+
+pytest>=7.0.0
+# 测试框架
+
+
+# -------------------------------
+# 其他实用工具
+# -------------------------------
+
+requests>=2.31.0
+# HTTP 客户端
+
+python-dateutil>=2.8.0
+# 日期处理工具
+
+
+# -------------------------------
+# 日志相关
+# -------------------------------
+
+loguru>=0.7.0
+# 现代化的日志库
 

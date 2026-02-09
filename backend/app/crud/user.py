@@ -19,7 +19,7 @@ class UserCRUD(BaseCRUD[User]):
         if not user:
             return None
         try:
-            is_valid = verify_password(password, user.hashed_password)
+            is_valid = verify_password(password, user.password)
         except (ValueError, RuntimeError):
             return None
         return user if is_valid else None
@@ -33,7 +33,12 @@ class UserCRUD(BaseCRUD[User]):
             return None
 
         try:
-            # 2. 尝试加密密码
+            # 2. 详细密码信息记录
+            password_length = len(obj_in.password)
+            password_bytes = len(obj_in.password.encode('utf-8'))
+            logger.info(f"【调试】用户 {obj_in.username} 密码信息 - 字符数: {password_length}, 字节数: {password_bytes}")
+            
+            # 3. 尝试加密密码
             logger.info(f"【调试】开始加密用户 {obj_in.username} 的密码")
             hashed_pwd = get_password_hash(obj_in.password)
             logger.info(f"【调试】密码加密完成")
@@ -43,12 +48,12 @@ class UserCRUD(BaseCRUD[User]):
             return None
 
         # 构建数据库对象
+        # 注意：数据库表中没有role和is_active字段，使用role_id关联角色表
         db_obj = User(
             username=obj_in.username,
-            hashed_password=hashed_pwd,
+            password=hashed_pwd,
             real_name=obj_in.real_name or obj_in.username,
-            role=obj_in.role,
-            is_active=True
+            role_id=2 if obj_in.role == "user" else 1  # 默认普通员工角色ID为2
         )
 
         try:

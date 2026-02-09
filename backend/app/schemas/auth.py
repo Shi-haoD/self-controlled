@@ -38,3 +38,7 @@ class UserRegisterResponse(BaseModel):
     username: str
     real_name: str
     role: str
+
+# 刷新token响应
+class RefreshTokenResponse(BaseModel):
+    accessToken: str

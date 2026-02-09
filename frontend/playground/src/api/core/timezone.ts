@@ -9,18 +9,18 @@ export async function getTimezoneOptionsApi() {
       label: string;
       value: string;
     }[]
-  >('/timezone/getTimezoneOptions');
+  >('/v1/timezone/getTimezoneOptions');
 }
 /**
  * 获取用户时区
  */
 export async function getTimezoneApi(): Promise<null | string | undefined> {
-  return requestClient.get<null | string | undefined>('/timezone/getTimezone');
+  return requestClient.get<null | string | undefined>('/v1/timezone/getTimezone');
 }
 /**
  * 设置用户时区
  * @param timezone 时区
  */
 export async function setTimezoneApi(timezone: string): Promise<void> {
-  return requestClient.post('/timezone/setTimezone', { timezone });
+  return requestClient.post('/v1/timezone/setTimezone', { timezone });
 }

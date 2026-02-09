@@ -1,11 +1,11 @@
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 import sys
-from app.api.v1 import auth, user
-from app.models.base import Base
-from app.core.database import engine
+from app.core.database import init_db
+from app.api.v1 import auth, user, menu, timezone, worklog, system
 from app.utils.response import fail_response
 
 # 配置日志
@@ -16,14 +16,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 创建数据库表
-Base.metadata.create_all(bind=engine)
+# 初始化数据库表结构
+# init_db()
 
 # 初始化应用，关闭调试模式（生产环境必填）
 app = FastAPI(
     title="Self Controlled Backend",
     version="0.1.0",
-    debug=False  # 关闭调试，禁止暴露异常堆栈
+    debug=True  # 关闭调试，禁止暴露异常堆栈
 )
 
 # 跨域配置
@@ -58,4 +58,9 @@ async def value_error_handler(request: Request, exc: ValueError):
 # 注册路由
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 # 如果user路由未实现，注释下一行即可
-# app.include_router(user.router, prefix="/api/v1/user", tags=["User"])
+app.include_router(user.router, prefix="/api/v1/user", tags=["User"])
+# 新增路由
+app.include_router(menu.router, prefix="/api/v1/menu", tags=["Menu"])
+app.include_router(timezone.router, prefix="/api/v1/timezone", tags=["Timezone"])
+app.include_router(worklog.router, prefix="/api/v1/worklog", tags=["Worklog"])
+app.include_router(system.router, prefix="/api/v1/system", tags=["System"])

@@ -2,19 +2,20 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.worklog import WorkLogCreate
-from app.models.worklog import WorkLog
+from app.schemas.worklog import WorkLogCreate, WorkLogOut
+from app.models.worklog import WorkDaily
 
-router = APIRouter(prefix="/worklog", tags=["WorkLog"])
+router = APIRouter(prefix="/worklog", tags=["工时填报"])
 
 @router.get("")
 def list_worklogs(db: Session = Depends(get_db)):
-    return db.query(WorkLog).all()
+    worklogs = db.query(WorkDaily).all()
+    return [WorkLogOut.from_orm(worklog) for worklog in worklogs]
 
 @router.post("")
 def create_worklog(data: WorkLogCreate, db: Session = Depends(get_db)):
-    obj = WorkLog(**data.dict())
+    obj = WorkDaily(**data.dict())
     db.add(obj)
     db.commit()
     db.refresh(obj)
-    return obj
+    return WorkLogOut.from_orm(obj)
