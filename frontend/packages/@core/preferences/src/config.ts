@@ -27,13 +27,13 @@ const defaultPreferences: Preferences = {
     layout: 'sidebar-nav',
     locale: 'zh-CN',
     loginExpiredMode: 'page',
-    name: 'Vben Admin',
+    name: 'Self Ctrl',
     preferencesButtonPosition: 'auto',
     watermark: false,
     watermarkContent: '',
     zIndex: 200,
   },
-  breadcrumb: {
+  breadcrumb: { 
     enable: true,
     hideOnlyOne: false,
     showHome: false,
