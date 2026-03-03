@@ -16,7 +16,9 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY internal/ ./internal/
 COPY packages/ ./packages/
 COPY apps/web-antd/ ./apps/web-antd/
-COPY playground/ ./playground/
+COPY playground/.env.production playground/index.html playground/package.json playground/vite.config.mts playground/tsconfig.json playground/tsconfig.node.json ./playground/
+COPY playground/src/ ./playground/src/
+COPY playground/public/ ./playground/public/
 COPY scripts/deploy/nginx.conf ./scripts/deploy/nginx.conf
 
 # 安装依赖
