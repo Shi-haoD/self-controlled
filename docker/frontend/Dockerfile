@@ -1,5 +1,5 @@
 # Frontend Dockerfile - 优化内存占用
-FROM node:22-alpine AS frontend
+FROM docker.m.daocloud.io/node:22-alpine AS frontend
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -25,7 +25,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 # 构建前端
 RUN pnpm run build:play
 
-FROM nginx:stable-alpine AS production
+FROM nginx:alpine AS production
 
 # 配置 nginx
 RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf \

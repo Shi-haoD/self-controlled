@@ -1,5 +1,5 @@
 # Backend Dockerfile - 优化内存占用
-FROM python:3.12-slim AS backend
+FROM docker.m.daocloud.io/python:3.12-slim AS backend
 
 # 设置环境变量
 ENV PYTHONDONTWRITEBYTECODE=1 \
