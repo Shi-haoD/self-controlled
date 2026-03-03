@@ -9,8 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 使用国内镜像源并安装系统依赖
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
