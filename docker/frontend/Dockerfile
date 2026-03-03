@@ -25,7 +25,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 # 构建前端
 RUN pnpm run build:play
 
-FROM nginx:alpine AS production
+FROM docker.m.daocloud.io/nginx:alpine AS production
 
 # 配置 nginx
 RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf \
