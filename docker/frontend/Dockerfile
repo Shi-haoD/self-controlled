@@ -12,10 +12,10 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # 仅复制必要的文件
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY internal/ ./internal/
 COPY packages/ ./packages/
-Copy apps/web-antd/ ./apps/web-antd/
+COPY apps/web-antd/ ./apps/web-antd/
 COPY playground/ ./playground/
 COPY scripts/deploy/nginx.conf ./scripts/deploy/nginx.conf
 
