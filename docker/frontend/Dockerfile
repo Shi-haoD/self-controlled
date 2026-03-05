@@ -8,8 +8,10 @@ ENV NODE_OPTIONS="--max-old-space-size=4096" \
 
 WORKDIR /app
 
-# 安装 pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# 配置使用国内镜像源
+RUN corepack enable && \
+    corepack prepare pnpm@latest --activate && \
+    pnpm config set registry https://registry.npmmirror.com
 
 # 仅复制必要的文件
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
@@ -21,8 +23,8 @@ COPY playground/src/ ./playground/src/
 COPY playground/public/ ./playground/public/
 COPY scripts/deploy/nginx.conf ./scripts/deploy/nginx.conf
 
-# 安装依赖
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# 安装依赖（使用国内镜像源）
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 
 # 构建前端
 RUN pnpm run build:play
