@@ -17,6 +17,8 @@ RUN corepack enable pnpm && \
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY internal/ ./internal/
 COPY packages/ ./packages/
+COPY scripts/turbo-run/ ./scripts/turbo-run/
+COPY scripts/vsh/ ./scripts/vsh/
 COPY apps/web-antd/ ./apps/web-antd/
 COPY playground/.env.production playground/index.html playground/package.json playground/vite.config.mts playground/tsconfig.json playground/tsconfig.node.json ./playground/
 COPY playground/src/ ./playground/src/
