@@ -8,9 +8,9 @@ ENV NODE_OPTIONS="--max-old-space-size=4096" \
 
 WORKDIR /app
 
-# 配置使用国内镜像源
-RUN corepack enable && \
-    corepack prepare pnpm@latest --activate && \
+# 配置使用国内镜像源并安装 pnpm
+ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
+RUN corepack enable pnpm && \
     pnpm config set registry https://registry.npmmirror.com
 
 # 仅复制必要的文件
