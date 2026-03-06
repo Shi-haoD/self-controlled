@@ -34,11 +34,55 @@ def execute_sql_step_by_step():
         conn.autocommit = False  # 关闭自动提交，便于回滚
         cursor = conn.cursor()
         print("✅ 数据库连接成功！")
-        
-        # 按分号分割SQL语句
-        sql_statements = [stmt.strip() for stmt in sql_content.split(';') if stmt.strip()]
-        
-        print(f"📝 共计 {len(sql_statements)} 条SQL语句需要执行\n")
+                
+        # 智能分割 SQL 语句（处理 dollar quoting）
+        sql_statements = []
+        current_statement = []
+        in_dollar_quote = False
+        dollar_tag = None
+                
+        for line in sql_content.split('\n'):
+            stripped = line.strip()
+                    
+            # 检查是否进入 dollar quoting
+            if not in_dollar_quote and '$func$' in stripped:
+                in_dollar_quote = True
+                dollar_tag = '$func$'
+                current_statement.append(line)
+            # 检查是否退出 dollar quoting
+            elif in_dollar_quote and dollar_tag in stripped:
+                current_statement.append(line)
+                sql_statements.append('\n'.join(current_statement).strip())
+                current_statement = []
+                in_dollar_quote = False
+                dollar_tag = None
+            # 在 dollar quoting 内部
+            elif in_dollar_quote:
+                current_statement.append(line)
+            # 普通语句，按分号分割
+            elif ';' in line:
+                parts = line.split(';')
+                for i, part in enumerate(parts):
+                    if part.strip():
+                        if i < len(parts) - 1:
+                            current_statement.append(part + ';')
+                            sql_statements.append('\n'.join(current_statement).strip())
+                            current_statement = []
+                        else:
+                            current_statement.append(part)
+            else:
+                current_statement.append(line)
+                
+        # 添加最后一个语句
+        if current_statement:
+            final_stmt = '\n'.join(current_statement).strip()
+            if final_stmt:
+                sql_statements.append(final_stmt)
+                
+        # 过滤空语句
+        sql_statements = [stmt for stmt in sql_statements if stmt.strip()]
+                
+        print(f"📝 共计 {len(sql_statements)} 条 SQL 语句需要执行\n")
         
         success_count = 0
         failed_statements = []
