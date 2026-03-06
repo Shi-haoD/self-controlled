@@ -23,7 +23,6 @@ COPY apps/web-antd/ ./apps/web-antd/
 COPY playground/.env.production playground/index.html playground/package.json playground/vite.config.mts playground/tsconfig.json playground/tsconfig.node.json ./playground/
 COPY playground/src/ ./playground/src/
 COPY playground/public/ ./playground/public/
-COPY scripts/deploy/nginx.conf ./scripts/deploy/nginx.conf
 
 # 安装依赖（使用国内镜像源）
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
