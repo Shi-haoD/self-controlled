@@ -616,12 +616,12 @@ INSERT INTO report_template (template_name, dept, role, template_type, content, 
 -- 创建更新时间自动更新函数
 -- =============================================
 CREATE OR REPLACE FUNCTION update_updated_at_column()
-RETURNS TRIGGER AS '
+RETURNS TRIGGER AS $func$
 BEGIN
     NEW.update_time = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
-' LANGUAGE plpgsql;
+$func$ LANGUAGE plpgsql;
 
 -- 为所有表创建更新时间触发器
 CREATE TRIGGER update_sys_user_updated_at BEFORE UPDATE ON sys_user FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
