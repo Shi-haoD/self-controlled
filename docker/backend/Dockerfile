@@ -24,8 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 仅复制必要的源代码
 COPY app/ ./app/
-COPY sql/database_ddl.sql ./sql/
-COPY sql/init_database.py ./sql/
+COPY sql/ ./sql/
 
 # 创建非 root 用户运行应用
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
