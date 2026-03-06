@@ -21,7 +21,7 @@ services:
     networks:
       - self_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d work_management"]
       interval: 10s
       timeout: 5s
       retries: 5

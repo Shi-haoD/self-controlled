@@ -34,8 +34,7 @@ RUN pnpm run build:play
 FROM docker.m.daocloud.io/nginx:alpine AS production
 
 # 配置 nginx
-RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf \
-    && rm -rf /etc/nginx/conf.d/default.conf
+RUN rm -rf /etc/nginx/conf.d/default.conf
 
 # 复制构建产物
 COPY --from=frontend /app/playground/dist /usr/share/nginx/html
