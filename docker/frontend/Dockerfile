@@ -41,7 +41,7 @@ COPY --from=frontend /app/playground/dist /usr/share/nginx/html/
 COPY --from=frontend /app/docs/docs/.vitepress/dist /usr/share/nginx/html/docs/
 
 # 复制你本地同级目录的 nginx 配置
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
