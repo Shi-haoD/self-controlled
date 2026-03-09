@@ -1,4 +1,4 @@
-# Frontend Dockerfile - 优化内存占用
+# Frontend Dockerfile - 支持 docs(项目手册) + playground 完整版
 FROM docker.m.daocloud.io/node:22-slim AS frontend
 
 ENV PNPM_HOME="/pnpm"
@@ -8,51 +8,40 @@ ENV NODE_OPTIONS="--max-old-space-size=4096" \
 
 WORKDIR /app
 
-# 配置使用国内镜像源并安装 pnpm
+# 配置国内镜像源
 ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
+
+# 👇 【核心修复】给 node:22-slim 安装 GIT（解决docs构建失败！）
+RUN apt-get update && \
+    apt-get install -y git --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*  # 清理缓存，减小镜像体积
+
+# 安装 pnpm
 RUN corepack enable pnpm && \
     pnpm config set registry https://registry.npmmirror.com
 
-# 仅复制必要的文件
-#COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-#COPY internal/ ./internal/
-#COPY packages/ ./packages/
-#COPY scripts/turbo-run/ ./scripts/turbo-run/
-#COPY scripts/vsh/ ./scripts/vsh/
-#COPY apps/web-antd/ ./apps/web-antd/
-#COPY playground/.env.production playground/index.html playground/package.json playground/vite.config.mts playground/tsconfig.json playground/tsconfig.node.json ./playground/
-#COPY playground/src/ ./playground/src/
-#COPY playground/public/ ./playground/public/
-#COPY scripts/deploy/nginx.conf ./scripts/deploy/nginx.conf
-WORKDIR /app
-
-# copy package.json and pnpm-lock.yaml to workspace
+# 复制全部项目文件
 COPY . /app
 
-# 安装依赖（使用国内镜像源）
+# 安装依赖（严格锁定版本）
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-# 构建前端(全部项)
-#RUN pnpm run build --filter=\!./docs
-
-# （仅打包 docs + playground，推荐！）
+# 【你要的功能】同时打包 文档手册(docs) + 演示站点(playground)
 RUN pnpm run build --filter=@vben/docs --filter=@vben/playground
 
+# ==================== Nginx 部署阶段 ====================
 FROM docker.m.daocloud.io/nginx:stable-alpine AS production
 
-# 配置 nginx
-#RUN rm -rf /etc/nginx/conf.d/default.conf
-
-# 配置 nginx
+# Nginx 基础配置（支持 mjs 前端文件）
 RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf \
     && rm -rf /etc/nginx/conf.d/default.conf
 
-# 复制构建产物
-COPY --from=frontend /app/playground/dist /usr/share/nginx/html
+# 复制 2 份构建产物：playground(前端) + docs(项目手册)
+COPY --from=frontend /app/playground/dist /usr/share/nginx/html/
+COPY --from=frontend /app/docs/docs/.vitepress/dist /usr/share/nginx/html/docs/
 
-# 复制 nginx 配置
-#COPY --from=frontend /app/scripts/deploy/nginx.conf /etc/nginx/nginx.conf
-COPY --from=frontend nginx.conf /etc/nginx/nginx.conf
+# 复制你本地同级目录的 nginx 配置
+COPY nginx.conf /etc/nginx/nginx.conf
+
 EXPOSE 8080
-
 CMD ["nginx", "-g", "daemon off;"]
