@@ -61,7 +61,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: scripts/deploy/Dockerfile
+      dockerfile: ../docker/frontend/Dockerfile
     container_name: self_frontend
     restart: always
     depends_on:
