@@ -32,8 +32,11 @@ COPY . /app
 # 安装依赖（使用国内镜像源）
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-# 构建前端
-RUN pnpm run build --filter=\!./docs
+# 构建前端(全部项)
+#RUN pnpm run build --filter=\!./docs
+
+# （仅打包 docs + playground，推荐！）
+RUN pnpm run build --filter=@vben/docs --filter=@vben/playground
 
 FROM docker.m.daocloud.io/nginx:stable-alpine AS production
 

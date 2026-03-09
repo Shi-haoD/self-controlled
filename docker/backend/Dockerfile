@@ -17,6 +17,9 @@ RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debia
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# 配置 pip 使用清华镜像源
+#RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
 # 复制依赖文件
 COPY requirements.txt .
 
