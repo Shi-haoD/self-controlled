@@ -61,13 +61,13 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ../docker/frontend/Dockerfile
+      dockerfile: scripts/deploy/Dockerfile
     container_name: self_frontend
     restart: always
     depends_on:
       - backend
     environment:
-      VITE_GLOB_API_URL: http://localhost:8000/api/v1
+      VITE_GLOB_API_URL: http://backend:8000/api
       TZ: Asia/Shanghai
     ports:
       - "8080:8080"
