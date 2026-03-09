@@ -1,4 +1,4 @@
-FROM docker.m.daocloud.io/node:22-slim AS builder
+FROM node:22-slim AS builder
 
 # --max-old-space-size
 ENV PNPM_HOME="/pnpm"
@@ -19,7 +19,7 @@ RUN pnpm run build --filter=\!./docs
 
 RUN echo "Builder Success 🎉"
 
-FROM docker.m.daocloud.io/nginx:stable-alpine AS production
+FROM nginx:stable-alpine AS production
 
 # 配置 nginx
 RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf \
