@@ -14,7 +14,7 @@ ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
 # 👇 【核心修复】给 node:22-slim 安装 GIT（解决docs构建失败！）
 RUN apt-get update && \
     apt-get install -y git --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*  # 清理缓存，减小镜像体积
+    rm -rf /var/lib/apt/lists/*
 
 # 安装 pnpm
 RUN corepack enable pnpm && \
