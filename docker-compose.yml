@@ -37,7 +37,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://admin:password123@postgres:5432/self_controlled
+      DATABASE_URL: postgresql+psycopg://admin:password123@postgres:5432/self_controlled
       JWT_SECRET: your-super-secret-key-change-in-production-self-ctrl-2026
       JWT_EXPIRE_MINUTES: "1440"
       APP_ENV: production
