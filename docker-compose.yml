@@ -21,7 +21,7 @@ services:
     networks:
       - self_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d work_management"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d self_controlled"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -37,7 +37,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://admin:password123@postgres:5432/work_management
+      DATABASE_URL: postgresql://admin:password123@postgres:5432/self_controlled
       JWT_SECRET: your-super-secret-key-change-in-production-self-ctrl-2026
       JWT_EXPIRE_MINUTES: "1440"
       APP_ENV: production
