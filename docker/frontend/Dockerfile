@@ -38,7 +38,7 @@ RUN echo "types { application/javascript js mjs; }" > /etc/nginx/conf.d/mjs.conf
 
 # 复制 2 份构建产物：playground(前端) + docs(项目手册)
 COPY --from=frontend /app/playground/dist /usr/share/nginx/html/
-COPY --from=frontend /app/docs/docs/.vitepress/dist /usr/share/nginx/html/docs/
+#COPY --from=frontend /app/docs/docs/.vitepress/dist /usr/share/nginx/html/docs/
 
 # 复制你本地同级目录的 nginx 配置
 COPY --from=frontend /app/nginx.conf /etc/nginx/nginx.conf
