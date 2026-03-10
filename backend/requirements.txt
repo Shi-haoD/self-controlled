@@ -17,7 +17,7 @@ uvicorn[standard]>=0.24.0
 sqlalchemy>=2.0.0
 # ORM 框架：用于定义模型、操作数据库（兼容 PostgreSQL / MySQL 等）
 
-psycopg2>=2.9.0
+psycopg[binary,pool]>=3.0.0
 # PostgreSQL 官方驱动（需编译安装，Docker 环境中已预装 build-essential 和 libpq-dev）
 
 alembic>=1.12.0
