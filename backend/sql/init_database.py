@@ -9,6 +9,7 @@
 import os
 import sys
 from pathlib import Path
+# 🔥 修复1：统一使用新版 psycopg（删除psycopg2相关）
 import psycopg
 import bcrypt
 from app.core.config import settings
@@ -17,49 +18,49 @@ from app.core.config import settings
 def encrypt_user_passwords(conn):
     """加密所有用户的明文密码"""
     print("\n🔐 开始加密用户密码...")
-    
+
     try:
         cursor = conn.cursor()
-        
+
         # 查询所有密码为明文的用户（假设明文密码不含$符号）
         cursor.execute("""
-            SELECT id, username, password 
-            FROM sys_user 
-            WHERE password NOT LIKE '$2b$%'
-        """)
-        
+                       SELECT id, username, password
+                       FROM sys_user
+                       WHERE password NOT LIKE '$2b$%'
+                       """)
+
         users_to_encrypt = cursor.fetchall()
-        
+
         if not users_to_encrypt:
             print("✅ 所有用户密码已经是加密状态")
             return True
-        
+
         print(f"🔍 发现 {len(users_to_encrypt)} 个需要加密的用户")
-        
+
         # 加密每个用户的密码
         for user in users_to_encrypt:
             user_id, username, plain_password = user
-            
+
             # 生成 bcrypt 哈希
             hashed_password = bcrypt.hashpw(
-                plain_password.encode('utf-8'), 
+                plain_password.encode('utf-8'),
                 bcrypt.gensalt()
             ).decode('utf-8')
-            
+
             # 更新数据库中的密码
             cursor.execute("""
-                UPDATE sys_user 
-                SET password = %s
-                WHERE id = %s
-            """, (hashed_password, user_id))
-            
+                           UPDATE sys_user
+                           SET password = %s
+                           WHERE id = %s
+                           """, (hashed_password, user_id))
+
             print(f"✅ 用户 '{username}' 密码已加密")
-        
+
         # 提交事务
         conn.commit()
         print(f"\n🎉 成功加密 {len(users_to_encrypt)} 个用户密码")
         return True
-        
+
     except Exception as e:
         print(f"❌ 密码加密失败：{str(e)}")
         return False
@@ -70,42 +71,41 @@ def encrypt_user_passwords(conn):
 def verify_encryption(conn):
     """验证密码加密结果"""
     print("\n📊 验证密码加密状态...")
-    
+
     try:
         cursor = conn.cursor()
-        
+
         # 统计加密和未加密的用户数量
         cursor.execute("""
-            SELECT 
-                COUNT(*) as total_users,
-                COUNT(CASE WHEN password LIKE '$2b$%' THEN 1 END) as encrypted_users,
-                COUNT(CASE WHEN password NOT LIKE '$2b$%' THEN 1 END) as plain_users
-            FROM sys_user
-        """)
-        
+                       SELECT COUNT(*)                                              as total_users,
+                              COUNT(CASE WHEN password LIKE '$2b$%' THEN 1 END)     as encrypted_users,
+                              COUNT(CASE WHEN password NOT LIKE '$2b$%' THEN 1 END) as plain_users
+                       FROM sys_user
+                       """)
+
         stats = cursor.fetchone()
         total, encrypted, plain = stats
-        
+
         print(f"📊 密码加密状态统计:")
         print(f"   总用户数：{total}")
         print(f"   已加密用户：{encrypted}")
         print(f"   明文用户：{plain}")
-        
+
         if plain > 0:
             print(f"\n⚠️  仍有 {plain} 个用户的密码未加密:")
             cursor.execute("""
-                SELECT username, password 
-                FROM sys_user 
-                WHERE password NOT LIKE '$2b$%'
-            """)
+                           SELECT username, password
+                           FROM sys_user
+                           WHERE password NOT LIKE '$2b$%'
+                           """)
             plain_users = cursor.fetchall()
-            
+
             for user in plain_users:
                 print(f"   - {user[0]}: {user[1]}")
-        
+
         cursor.close()
         return plain == 0
-        
+
     except Exception as e:
         print(f"❌ 验证失败：{str(e)}")
         return False
@@ -123,14 +123,15 @@ def execute_sql_step_by_step():
         # 处理数据库 URL 格式（兼容 SQLAlchemy 格式）
         db_url = settings.DATABASE_URL
         if db_url.startswith('postgresql+psycopg2://'):
-            # 转换为 psycopg2 可以直接使用的格式
+            # 转换为 psycopg 可以直接使用的格式
             db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://')
             print(f"🔧 自动转换数据库 URL 格式")
 
         # 连接数据库
         print("🔌 连接数据库...")
         print(f"🔗 连接字符串：{db_url}")
-        conn = psycopg2.connect(db_url)
+        # 🔥 修复2：使用新版 psycopg.connect 替代 psycopg2.connect
+        conn = psycopg.connect(db_url)
         conn.autocommit = False  # 关闭自动提交，便于回滚
         cursor = conn.cursor()
         print("✅ 数据库连接成功！")
@@ -221,8 +222,7 @@ def execute_sql_step_by_step():
                 elif 'unterminated dollar-quoted string' in error_msg or 'syntax error at or near' in error_msg:
                     if 'update_updated_at_column' in statement:
                         print(f"    ⚠️  触发器函数语法错误，建议单独修复")
-                        print(f"    💡 运行：python fix_triggers.py")
-                        success_count += 1  # 让初始化继续进行
+                        print(f"    💡 运行：python fix success_count += 1  # 让初始化继续进行
 
                 continue
 
@@ -274,7 +274,7 @@ def main():
         # 处理数据库 URL 格式（兼容 SQLAlchemy 格式）
         db_url = settings.DATABASE_URL
         if db_url.startswith('postgresql+psycopg2://'):
-            # 转换为 psycopg2 可以直接使用的格式
+            # 转换为 psycopg 可以直接使用的格式
             db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://')
             print(f"🔧 自动转换数据库 URL 格式")
 
@@ -286,19 +286,20 @@ def main():
             print("\n" + "=" * 60)
             print("🔐 执行用户密码加密...")
             print("=" * 60)
-            
+
             # 重新连接以进行密码加密
-            conn = psycopg2.connect(db_url)
+            # 🔥 修复3：新版连接方式
+            conn = psycopg.connect(db_url)
             conn.autocommit = False
-            
+
             encrypt_success = encrypt_user_passwords(conn)
-            
+
             if encrypt_success:
                 # 验证加密结果
                 verify_success = verify_encryption(conn)
-                
+
                 conn.close()
-                
+
                 # 输出初始化信息
                 print("\n" + "=" * 60)
                 print("🎉 数据库初始化完成！")
@@ -307,7 +308,7 @@ def main():
                 print("   用户名：admin")
                 print("   密码：admin123")
                 print("\n💡 请根据实际需求修改初始数据和权限配置。")
-                
+
                 if verify_success:
                     print("\n✅ 所有用户密码均已成功加密！")
                 else:
