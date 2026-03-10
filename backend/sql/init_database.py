@@ -9,7 +9,7 @@
 import os
 import sys
 from pathlib import Path
-import psycopg2
+import psycopg
 import bcrypt
 from app.core.config import settings
 
