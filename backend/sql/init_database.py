@@ -12,7 +12,6 @@ from pathlib import Path
 import psycopg2
 import bcrypt
 from app.core.config import settings
-from sqlalchemy import text
 
 
 def encrypt_user_passwords(conn):
@@ -23,11 +22,11 @@ def encrypt_user_passwords(conn):
         cursor = conn.cursor()
         
         # 查询所有密码为明文的用户（假设明文密码不含$符号）
-        cursor.execute(text("""
+        cursor.execute("""
             SELECT id, username, password 
             FROM sys_user 
             WHERE password NOT LIKE '$2b$%'
-        """))
+        """)
         
         users_to_encrypt = cursor.fetchall()
         
@@ -48,14 +47,11 @@ def encrypt_user_passwords(conn):
             ).decode('utf-8')
             
             # 更新数据库中的密码
-            cursor.execute(text("""
+            cursor.execute("""
                 UPDATE sys_user 
-                SET password = :hashed_password 
-                WHERE id = :user_id
-            """), {
-                'hashed_password': hashed_password,
-                'user_id': user_id
-            })
+                SET password = %s
+                WHERE id = %s
+            """, (hashed_password, user_id))
             
             print(f"✅ 用户 '{username}' 密码已加密")
         
@@ -79,13 +75,13 @@ def verify_encryption(conn):
         cursor = conn.cursor()
         
         # 统计加密和未加密的用户数量
-        cursor.execute(text("""
+        cursor.execute("""
             SELECT 
                 COUNT(*) as total_users,
                 COUNT(CASE WHEN password LIKE '$2b$%' THEN 1 END) as encrypted_users,
                 COUNT(CASE WHEN password NOT LIKE '$2b$%' THEN 1 END) as plain_users
             FROM sys_user
-        """))
+        """)
         
         stats = cursor.fetchone()
         total, encrypted, plain = stats
@@ -97,11 +93,11 @@ def verify_encryption(conn):
         
         if plain > 0:
             print(f"\n⚠️  仍有 {plain} 个用户的密码未加密:")
-            cursor.execute(text("""
+            cursor.execute("""
                 SELECT username, password 
                 FROM sys_user 
                 WHERE password NOT LIKE '$2b$%'
-            """))
+            """)
             plain_users = cursor.fetchall()
             
             for user in plain_users:
