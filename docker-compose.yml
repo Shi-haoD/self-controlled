@@ -5,7 +5,7 @@ services:
     container_name: self_postgres
     restart: always
     environment:
-      POSTGRES_DB: work_management
+      POSTGRES_DB: self_controlled
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password123
       TZ: Asia/Shanghai

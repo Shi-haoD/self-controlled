@@ -25,17 +25,22 @@ app = FastAPI(
     version="0.1.0",
     debug=True  # 关闭调试，禁止暴露异常堆栈
 )
-
+# 允许的前端域名列表【在这里添加所有前端】
+ALLOWED_ORIGINS = [
+    # 线上前端
+    "http://self.liushihao.top",
+    "http://admin.liushihao.top",
+    "http://docs.liushihao.top",
+    # 本地开发前端
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:3000",
+]
 # 跨域配置
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=["*"],
-    allow_origins=[
-        "http://self.liushihao.top",
-        # 本地开发地址（可选）
-        "http://localhost:8080",
-        "http://127.0.0.1:8080"
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
