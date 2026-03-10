@@ -27,7 +27,7 @@ COPY . /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # 【你要的功能】同时打包 文档手册(docs) + 演示站点(playground)
-RUN pnpm run build:all
+RUN pnpm run build:play
 
 # ==================== Nginx 部署阶段 ====================
 FROM docker.m.daocloud.io/nginx:stable-alpine AS production
