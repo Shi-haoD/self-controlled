@@ -131,7 +131,7 @@ pip list
 - **Pydantic**: 数据校验库
 - **Passlib**: 密码加密
 - **PyJWT**: JWT令牌处理
-- **psycopg2-binary**: PostgreSQL驱动
+- **psycopg[binary,pool]**: PostgreSQL 驱动（3.x 版本）
 - **pytz**: 时区处理
 
 ## 🗃️ 数据库初始化

@@ -122,9 +122,9 @@ def execute_sql_step_by_step():
 
         # 处理数据库 URL 格式（兼容 SQLAlchemy 格式）
         db_url = settings.DATABASE_URL
-        if db_url.startswith('postgresql+psycopg2://'):
+        if db_url.startswith('postgresql+psycopg2://') or db_url.startswith('postgresql+psycopg://'):
             # 转换为 psycopg 可以直接使用的格式
-            db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://')
+            db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://').replace('postgresql+psycopg://', 'postgresql://')
             print(f"🔧 自动转换数据库 URL 格式")
 
         # 连接数据库
@@ -273,9 +273,9 @@ def main():
 
         # 处理数据库 URL 格式（兼容 SQLAlchemy 格式）
         db_url = settings.DATABASE_URL
-        if db_url.startswith('postgresql+psycopg2://'):
+        if db_url.startswith('postgresql+psycopg2://') or db_url.startswith('postgresql+psycopg://'):
             # 转换为 psycopg 可以直接使用的格式
-            db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://')
+            db_url = db_url.replace('postgresql+psycopg2://', 'postgresql://').replace('postgresql+psycopg://', 'postgresql://')
             print(f"🔧 自动转换数据库 URL 格式")
 
         # 逐行执行 SQL 语句
