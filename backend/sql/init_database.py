@@ -222,7 +222,7 @@ def execute_sql_step_by_step():
                 elif 'unterminated dollar-quoted string' in error_msg or 'syntax error at or near' in error_msg:
                     if 'update_updated_at_column' in statement:
                         print(f"    ⚠️  触发器函数语法错误，建议单独修复")
-                        print(f"    💡 运行：python fix success_count += 1  # 让初始化继续进行
+                        print(f"    💡 运行：python fix success_count += 1  # 让初始化继续进行")
 
                 continue
 
